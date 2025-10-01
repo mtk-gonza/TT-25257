@@ -38,8 +38,7 @@ function PersonFunction(name, age) {
 function PersonArrow(name, age) {
     this.name = name;
     this.age = age;
-    this.greet = () => console.log(`Hello, I'm ${this.name} un objeto con un metodo "arrow"`)
-        ;
+    this.greet = () => console.log(`Hello, I'm ${this.name} un objeto con un metodo "arrow"`);
 }
 
 const person3 = new PersonFunction('Cosme', 37)
@@ -56,8 +55,8 @@ class User {
 
     login(inputEmail, password) {
         return this.email === inputEmail && this.password === password
-            ? "Login successful!"
-            : "Invalid email or password.";
+            ? 'Login successful!'
+            : 'Invalid email or password.';
     }
 }
 
@@ -81,10 +80,9 @@ class Buyer extends User {
         if (this.balance >= amount) {
             this.balance -= amount; // Resta el monto del balance 
             this.purchases += 1; // Incrementa el contador de compras 
-            return `Purchase successful! Remaining balance:  
-               ${this.balance}`;
+            return `Purchase successful! Remaining balance: ${this.balance}`;
         } else {
-            return "Insufficient balance.";
+            return 'Insufficient balance.';
         }
     }
 }
