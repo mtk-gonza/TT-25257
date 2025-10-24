@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs';
+import * as authService from './auth_service.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,9 +18,9 @@ const writeUsers = (users) => {
 
 export const createUser = (data) => {
     const users = readUsers();
-    const newId = users.length > 0 ? Math.max(...users.map(p => p.id)) + 1 : 1;
-    const thumbnail = `https://example.com/${data.name}.jpg`
-    const newUser = { id: newId, ...data, thumbnail: thumbnail };
+    const newId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
+    const userCrypto = authService.encrypterPassword(data);
+    const newUser = { id: newId, ...userCrypto };
     users.push(newUser);
     writeUsers(users);
     return newUser;
@@ -37,12 +38,18 @@ export const readUserById = (id) => {
     return user
 };
 
+export const readUserByUsername = (username) => {
+    const users = readUsers();
+    const user = users.find(u => u.username === username);
+    return user
+};
+
 export const updateUser = (id, updateData) => {
     const users = readUsers();
     const index = users.findIndex(u => u.id === Number(id));
     if (index === -1) return null;
-    const thumbnail = `https://example.com/${updateData.name}.jpg`
-    users[index] = { ...users[index], name: updateData.name, price: Number(updateData.price), thumbnail };
+    const userCrypto = authService.encrypterPassword(updateData);
+    users[index] = { ...users[index], ...userCrypto };
     writeUsers(users);
     return users[index];
 };

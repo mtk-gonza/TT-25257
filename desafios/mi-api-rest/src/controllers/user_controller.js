@@ -1,12 +1,21 @@
 import * as userService from '../services/user_service.js';
 
 export const createUser = async (req, res) => {
-    const data = req.body;
+    const { name, lastname, username, password } = req.body;
     try {
-        const user = await userService.createUser(data);
-        res.status(201).json(user);
+        if (!name || !lastname || !username || !password) {
+            return res.status(400).json({ error: 'Faltan datos requeridos' });
+        }
+        const existingUser = await userService.readUserByUsername(username);
+        if (existingUser) {
+            return res.status(409).json({ error: 'El nombre de usuario ya está en uso' });
+        }
+        const user = { name, lastname, username, password };
+        const newUser = await userService.createUser(user);
+        return res.status(201).json(newUser);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('Error en registro:', err);
+        return res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 
@@ -18,7 +27,6 @@ export const getAllUsers = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
-
 
 export const getUserById = async (req, res) => {
     const { user_id } = req.params;
