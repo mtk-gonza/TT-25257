@@ -1,17 +1,20 @@
-import express from 'express';
+import { app } from './src/app.js';
+import dotenv from 'dotenv';
 
-const PORT = 3000;
+dotenv.config();
 
-const app = express(); 
-
-app.listen(PORT, () => { 
-    console.log(`Server running at http://localhost:${PORT}`); 
-});
+const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => { 
-    res.send('Hola, mundo desde Express!'); 
+    res.send(`
+        Bienvenido a la API REST del ejercicio 10
+
+        Endpoints:
+        - GET /api/users
+        - GET /api/products
+    `); 
 }); 
 
-app.get('/ping', (req, res) => { 
-    res.send('pong'); 
-}); 
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+});
